@@ -3,17 +3,13 @@ package com.example.madhurarora.playment.adapter;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -29,30 +25,29 @@ import java.util.ArrayList;
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
 
     ArrayList<SearchResponse> movieList;
-    private Context context;
     Activity activity;
+    private Context context;
 
     public MovieListAdapter(ArrayList<SearchResponse> response) {
-        if(response != null) {
+        if (response != null) {
             movieList = response;
-        }
-        else {
+        } else {
             movieList = new ArrayList<>();
         }
     }
 
     public void setMovieList(ArrayList<SearchResponse> movieList) {
-        if(movieList != null) {
+        if (movieList != null) {
             this.movieList = movieList;
-        }
-        else {
+        } else {
             this.movieList = new ArrayList<>();
-        }    }
+        }
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
-        activity = (Activity)context;
+        activity = (Activity) context;
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -101,12 +96,11 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
         holder.layout.setOnDragListener(new myDragListner());
 
 
-
     }
 
     @Override
     public int getItemCount() {
-        if(movieList != null)
+        if (movieList != null)
             return movieList.size();
         return 0;
     }
@@ -120,7 +114,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
         public ViewHolder(View itemView) {
             super(itemView);
 
-            layout = (LinearLayout)itemView.findViewById(R.id.rootView);
+            layout = (LinearLayout) itemView.findViewById(R.id.rootView);
             year = (TextView) itemView.findViewById(R.id.year);
             title = (TextView) itemView.findViewById(R.id.movietitle);
             imageView = (NetworkImageView) itemView.findViewById(R.id.imageMovie);
@@ -145,6 +139,14 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
                     break;
 
                 case DragEvent.ACTION_DROP:
+                    Log.d("DROPPED", "DROPPED");
+                    View view = (View) event.getLocalState();
+                    ViewGroup owner = (ViewGroup) view.getParent();
+                    owner.removeView(view);
+                    LinearLayout container = (LinearLayout) v;
+                    container.removeAllViews();
+                    container.addView(view);
+                    view.setVisibility(View.VISIBLE);
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
                     v.setBackgroundColor(0xEEEEEEE);
